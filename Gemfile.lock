@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cache_for (1.0.2)
+    cache_for (1.0.1)
       redis
 
 GEM

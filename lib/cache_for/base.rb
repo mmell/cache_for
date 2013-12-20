@@ -63,13 +63,24 @@ module CacheFor
       "#{name}#{cache_time(seconds)}"
     end
 
+    def cacheable?(val)
+      begin
+        !(val.nil? or val.empty?)
+      rescue
+        true
+      end
+    end
+
     def fetch(name, seconds = nil)
-      if (cached = get(name, seconds)) != self.class::CacheMiss
+      cached = get(name, seconds)
+      if cacheable?(cached)
         cached
       else
         new_value = yield
-        set(name, new_value, seconds)
-        expire(name, seconds)
+        if cacheable?(new_value)
+          set(name, new_value, seconds)
+          expire(name, seconds)
+        end
         new_value
       end
     end
